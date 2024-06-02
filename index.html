@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bufik - Menu</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #f7f7f7; /* Light background color */
+            background-image: url('background.jpg'); /* Replace with your background image */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Parallax effect */
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #5cb8b2;
+            color: white;
+        }
+
+        .navigation a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .navigation img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .menu-item {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: calc(25% - 20px);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease; /* Add a transition effect */
+        }
+
+        .menu-item:hover {
+            transform: scale(1.05); /* Slightly scale up on hover */
+        }
+
+        .menu-container {
+            flex-grow: 1;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .menu-item {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: calc(25% - 20px);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-item img {
+            width: 300px;
+            height: 300px;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .menu-item h3 {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .menu-item button {
+            background: #5cb8b2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .menu-item button:hover {
+            background: #4a9c97;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .cart-item button {
+            background: #5cb8b2;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cart-item button:hover {
+            background: #4a9c97;
+        }
+        /* Добавление стилей для модальных окон */
+        .modal {
+            display: none; /* Скрываем модальное окно по умолчанию */
+            position: fixed; /* Фиксированное положение */
+            z-index: 1; /* Размещаем поверх других элементов */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Включаем прокрутку, если содержимое больше окна */
+            background-color: rgba(0,0,0,0.4); /* Темно-серая затемнение фона */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% сверху и по центру */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Можете изменить размер в зависимости от ваших нужд */
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #clear-cart, #pay-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            color: white;
+            background-color: #f44336; /* Красный цвет для кнопки очистки корзины */
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        #pay-button {
+            background-color: #4CAF50; /* Зеленый цвет для кнопки оплаты */
+        }
+
+        #clear-cart:hover, #pay-button:hover {
+            opacity: 0.8;
+        }
+
+        #logout-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            color: white;
+            background-color: #f44336; /* Красный цвет для кнопки выхода */
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease; /* Добавление плавности при наведении */
+        }
+
+        #logout-button:hover {
+            background-color: #da190b; /* Темно-красный цвет при наведении */
+        }
+
+        .menu-item {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: calc(25% - 20px);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease; /* Add a transition effect */
+        }
+
+        .menu-item:hover {
+            transform: scale(1.05); /* Slightly scale up on hover */
+        }
+
+        /* Example of a new style for the buttons */
+        .menu-item button,
+        .modal button {
+            background: #5cb8b2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Add a transition effect */
+        }
+
+        .menu-item button:hover,
+        .modal button:hover {
+            background: #4a9c97;
+        }
+
+        /* Example of a new style for the modal */
+        .modal {
+            /* ... */
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+        }
+
+        /* Example of a new style for the close button */
+        .close {
+            color: #555;
+            transition: color 0.3s ease; /* Add a transition effect */
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #333;
+        }
+
+        .restaurant-name {
+            text-align: center;
+            font-size: 3em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+        }
+
+        .menu-container {
+            /* ... existing styles ... */
+            display: flex; /* Use flexbox to create a grid-like layout */
+            flex-wrap: wrap; /* Allow items to wrap to the next line */
+            justify-content: center; /* Center items horizontally */
+            align-items: flex-start; /* Align items to the top of the container */
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        
+        <div class="profile">
+            <a href="#" id="profile-link"><img src="profile.png" alt="Profile"></a>
+        </div>
+        <div class="restaurant-name">Bufik</div>
+        <a href="#" id="cart-link"><img src="basket.png" alt="Cart"></a>
+    </div>
+
+    <div class="menu-container">
+        <div class="menu-item">
+            <img src="dish1.jpg" alt="Dish 1">
+            <h3>Мини пицца (1.98)</h3>
+            <button class="add-to-cart">Добавить в корзину</button>
+        </div>
+        <div class="menu-item">
+            <img src="dish2.jpg" alt="Dish 2">
+            <h3>Сосика в тесте (1.70)</h3>
+            <button class="add-to-cart">Добавить в корзину</button>
+        </div>
+        <div class="menu-item">
+            <img src="dish3.jpg" alt="Dish 3">
+            <h3>Чебурек (1.87)</h3>
+            <button class="add-to-cart">Добавить в корзину</button>
+        </div>
+        <div class="menu-item">
+            <img src="dish4.jpg" alt="Dish 4">
+            <h3>Блинчик с творогом (1.65)</h3>
+            <button class="add-to-cart">Добавить в корзину</button>
+        </div>
+        <div class="menu-item">
+            <img src="dish5.jpg" alt="Dish 5">
+            <h3>Блинчик с ветчиной и сыром (1.63)</h3>
+            <button class="add-to-cart">Добавить в корзину</button>
+        </div>
+        <div class="menu-item">
+            <img src="dish6.jpg" alt="Dish 6">
+            <h3>Салат цезарь (2.75)</h3>
+            <button class="add-to-cart">Добавить в корзину</button>
+        </div>
+        <div class="menu-item">
+            <img src="dish7.jpg" alt="Dish 7">
+            <h3>Круасан с малиной (1.95)</h3>
+            <button class="add-to-cart">Добавить в корзину</button>
+        </div>
+
+        <!-- Добавьте еще блюд здесь -->
+    </div>
+
+    <div class="modal" id="profile-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Профиль</h2>
+            <div id="profile-name"></div>
+            <!-- Здесь можно добавить другие данные профиля, если это необходимо -->
+            <button id="logout-button">Выйти</button>
+        </div>
+    </div>
+
+    <div class="cart">
+        <div class="modal" id="cart-modal">
+            <!-- Содержимое модального окна корзины -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Корзина</h2>
+                <div id="cart-items"></div>
+                <button id="clear-cart">Очистить корзину</button>
+                <button id="pay-button">Оплатить</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Получение ссылок на профиль и корзину
+        var profileLink = document.getElementById('profile-link');
+        var cartLink = document.getElementById('cart-link');
+
+        // Получение модальных окон
+        var profileModal = document.getElementById('profile-modal');
+        var cartModal = document.getElementById('cart-modal');
+
+        // Получение элемента закрытия модального окна
+        var closeSpans = document.getElementsByClassName("close");
+
+        // Функция для открытия модального окна
+        function openModal(modal) {
+            modal.style.display = "block";
+        }
+
+        // Функция для закрытия модального окна
+        function closeModal(modal) {
+            modal.style.display = "none";
+        }
+
+        // Привязка функций к ссылкам
+        profileLink.onclick = function() {
+            openModal(profileModal);
+        }
+
+        cartLink.onclick = function() {
+            openModal(cartModal);
+        }
+
+        // Привязка функции к элементам закрытия
+        for (var i = 0; i < closeSpans.length; i++) {
+            closeSpans[i].onclick = function() {
+                closeModal(profileModal);
+                closeModal(cartModal);
+            }
+        }
+
+        // При закрытии модального окна
+        window.onclick = function(event) {
+            if (event.target == profileModal || event.target == cartModal) {
+                closeModal(profileModal);
+                closeModal(cartModal);
+            }
+        }
+
+        // Получение корзины из локального хранилища или создание новой
+        var cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        function addToCart(button) {
+            var dishName = button.parentElement.querySelector('h3').textContent;
+            cart.push(dishName);
+            updateCartItems();
+            saveCartToLocalStorage();
+        }
+
+        function updateCartItems() {
+            var cartItems = document.getElementById('cart-items');
+            cartItems.innerHTML = '';
+            cart.forEach(function(item) {
+                var li = document.createElement('li');
+                li.textContent = item;
+                cartItems.appendChild(li);
+            });
+        }
+
+        function saveCartToLocalStorage() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        function clearCart() {
+            cart = [];
+            saveCartToLocalStorage();
+            updateCartItems();
+        }
+
+        function pay() {
+            // Здесь должен быть код для оплаты
+            alert('Оплата не реализована');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var addToCartButtons = document.querySelectorAll('.add-to-cart');
+            var clearCartButton = document.getElementById('clear-cart');
+            var payButton = document.getElementById('pay-button');
+
+            addToCartButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    addToCart(this);
+                });
+            });
+
+            clearCartButton.addEventListener('click', clearCart);
+            payButton.addEventListener('click', pay);
+
+            // При загрузке страницы обновляем элементы корзины
+            updateCartItems();
+        });
+
+        function saveUserData(username) {
+            localStorage.setItem('username', username);
+        }
+
+        // Функция для получения данных пользователя из локального хранилища
+        function getUserData() {
+            return localStorage.getItem('username');
+        }
+
+        // Функция для выхода из аккаунта
+        function logout() {
+            localStorage.removeItem('username');
+            window.location.href = 'registration.html'; // Замените на URL вашей страницы регистрации
+        }
+
+        // Пример отображения данных пользователя в профиле
+        function displayUserProfile() {
+            var username = getUserData();
+            if (username) {
+                var profileName = document.getElementById('profile-name');
+                profileName.textContent = 'Добро пожаловать, ' + username;
+            }
+        }
+
+        // Пример вызова функций при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Отображение данных пользователя в профиле
+            displayUserProfile();
+
+            // Привязка функции к кнопке выхода
+            var logoutButton = document.getElementById('logout-button');
+            logoutButton.addEventListener('click', logout);
+        });
+
+            // Отображение данных пользователя в профиле
+            displayUserProfile();
+    
+    </script>
+</body>
+</html>
