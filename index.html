@@ -366,6 +366,15 @@
         </div>
     </div>
 
+    <div class="modal" id="payment-confirmation-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Подтверждение заказа</h2>
+            <p>Ваш заказ принят в обработку, оплата в пункте выдачи.</p>
+            <button id="close-payment-confirmation">Закрыть</button>
+        </div>
+    </div>
+
     <script>
         // Получение ссылок на профиль и корзину
         var profileLink = document.getElementById('profile-link');
@@ -444,9 +453,16 @@
         }
 
         function pay() {
-            // Здесь должен быть код для оплаты
-            alert('Оплата не реализована');
+            clearCart();
+
+            closeModal(cartModal);
+
+            openModal(document.getElementById('payment-confirmation-modal'));
         }
+
+        document.getElementById('close-payment-confirmation').addEventListener('click', function() {
+            closeModal(document.getElementById('payment-confirmation-modal'));
+        });
 
         document.addEventListener('DOMContentLoaded', function() {
             var addToCartButtons = document.querySelectorAll('.add-to-cart');
